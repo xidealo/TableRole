@@ -11,6 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
+<<<<<<< HEAD
     "nodemon": "^1.19.0"
+=======
+    "mysql": "^2.17.1"
+>>>>>>> 71aca42307a40b5025b4291d480221ef29e0c7af
   }
 }

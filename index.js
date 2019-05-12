@@ -55,3 +55,35 @@ http.createServer(function (req, res) {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('My first server!');
 }).listen(8080);
+
+
+
+http.createServer(function (req, res) {
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end('My first server');
+}).listen(8080);
+
+var pool = require("./config");
+
+rl.question("credentials: ", function(data) {
+    //console.log("Thank you for your valuable feedback:", answer);
+    //res = answer;
+    //setRole(data);
+    console.log(data);
+    //rl.close();
+});
+
+function getData() {
+    pool.getConnection((err, con) => {
+        if (err) throw err;
+    
+        con.query(
+            "SELECT * FROM 2BTeam.main",
+            (error, result) => {
+            if (error) throw error;
+            let str = JSON.stringify(result);
+            console.log(str);
+        });
+        con.release();
+    });
+}
