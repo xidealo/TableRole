@@ -1,3 +1,12 @@
+
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const app = express();
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 const http = require('http');
 const pool = require("./config");
 const readline = require('readline');
@@ -78,7 +87,7 @@ function startReadRequest() {
                     createRequest(request);
                 }
                 else {
-                    console.log("u dont have enough rights")
+                    console.log("u dont have enough rights");
                 }
                 break;
             }
@@ -122,7 +131,6 @@ function deleteRole() {
     console.log("Role deleted")
 }
 
-
 //"SELECT * FROM 2BTeam.main"
 
 function createRequest(request) {
@@ -140,6 +148,20 @@ function createRequest(request) {
     });
 }
 
+app.route("/get/all").get((req, res) => {
+    pool.getConnection((err, con) => {
+      if (err) throw err;
+      con.query(
+        "SELECT * FROM 2BTeam.main",
+         (error, result) => {
+        if (error) throw error;
+        let str = JSON.stringify(result);
+        res.send(str);
+      });
+      con.release();
+    });
+  });
+
 function userFilter(request) {
     if (request.toString().includes("secret_info") || request.toString().includes("*")) {
         return false;
@@ -149,8 +171,7 @@ function userFilter(request) {
     }
 }
 
-http.createServer(function (req, res) {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('My first server');
-}).listen(8080);
-
+app.listen(8080, () => {
+    console.log("server lisnet");
+    //nodemon позвоялет изменять страницу без обновления
+  });
